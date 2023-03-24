@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const createError = require("http-errors");
+const passport = require("passport");
 // Connecting with mongo db
 mongoose
   .connect("mongodb://mongodb:27017/mydatabase")
@@ -15,6 +16,12 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to mongo", err.reason);
   });
+
+require("./auth/auth");
+
+const secureRoute = require("./routes/secure-routes");
+const authRoute = require("./routes/auth.route");
+
 // Setting up port with express js
 const employeeRoute = require("./routes/employee.route");
 const app = express();
@@ -27,6 +34,8 @@ app.use(
 app.use(cors());
 app.use(express.static(path.join(__dirname, "dist/mean-stack-crud-app")));
 app.use("/", express.static(path.join(__dirname, "dist/mean-stack-crud-app")));
+app.use("/auth", authRoute);
+app.use("/user", passport.authenticate("jwt", { session: false }), secureRoute);
 app.use("/employee", employeeRoute);
 // Create port
 const port = process.env.PORT || 4000;
