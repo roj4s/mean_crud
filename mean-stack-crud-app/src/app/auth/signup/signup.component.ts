@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../model/user';
+import { ApiService } from '../../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -9,12 +11,20 @@ import { User } from '../model/user';
 export class SignupComponent {
   user: User;
   submited: boolean;
-  constructor() {
+  constructor(public apiService: ApiService, public route: Router) {
     this.user = new User(null, null, null);
     this.submited = false;
   }
 
   submit() {
-    console.log('Signup form submit');
+    this.apiService.signup(this.user).subscribe(
+      (resp) => {
+        console.log(resp);
+        this.route.navigate(['/']);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

@@ -5,9 +5,11 @@ import { SignupComponent } from './signup/signup.component';
 import { FormsModule } from '@angular/forms';
 
 import { BrowserModule } from '@angular/platform-browser';
+import { ApiService } from '../api.service';
 
 @NgModule({
   declarations: [LoginComponent, SignupComponent],
   imports: [BrowserModule, CommonModule, FormsModule],
+  providers: [ApiService],
 })
 export class AuthModule {}
